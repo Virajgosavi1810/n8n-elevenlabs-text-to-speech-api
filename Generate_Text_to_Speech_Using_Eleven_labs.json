@@ -1,0 +1,217 @@
+{
+  "name": "Generate Text-to-Speech Using Eleven-labs",
+  "nodes": [
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "2e968b41-88f7-4b28-9837-af50ae130979",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              },
+              "leftValue": "voice_id",
+              "rightValue": ""
+            },
+            {
+              "id": "ad961bc9-6db8-4cac-8c63-30930e8beca7",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              },
+              "leftValue": "text",
+              "rightValue": ""
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "0ddf910d-f968-468a-be4a-29c2fee0cf39",
+      "name": "If params correct",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        360,
+        580
+      ],
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "respondWith": "binary",
+        "options": {}
+      },
+      "id": "9a26fadc-c82d-4f14-be2e-66a9ee116389",
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "position": [
+        820,
+        560
+      ],
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "generate-voice",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "39e21b8e-1383-4533-8a24-9cebccb6bf29",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "position": [
+        160,
+        580
+      ],
+      "webhookId": "5acc6769-6c0f-42a8-a69c-b05e437e18a9",
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.elevenlabs.io/v1/text-to-speech/{{ $json.body.voice_id }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpCustomAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"text\":  \"{{ $json.body.text }}\"\n} ",
+        "options": {}
+      },
+      "id": "40d112cc-4837-4aff-9526-35fc6c4a1c96",
+      "name": "Generate voice",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        600,
+        560
+      ],
+      "typeVersion": 4.2,
+      "credentials": {
+        "httpCustomAuth": {
+          "id": "sPy41McJ97lI3f3X",
+          "name": "11-lab-api-key"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Generate Text-to-Speech Using Elevenlabs via API\nThis workflow provides an API endpoint to generate speech from text using [Elevenlabs.io](https://elevenlabs.io/), a popular text-to-speech service.\n\n### Step 1: Configure Custom Credentials in n8n\nTo set up your credentials in n8n, create a new custom authentication entry with the following JSON structure:\n```json\n{\n  \"headers\": {\n    \"xi-api-key\": \"your-elevenlabs-api-key\"\n  }\n}\n```\nReplace `\"your-elevenlabs-api-key\"` with your actual Elevenlabs API key.\n\n### Step 2: Send a POST Request to the Webhook\nSend a POST request to the workflow's webhook endpoint with these two parameters:\n- `voice_id`: The ID of the voice from Elevenlabs that you want to use.\n- `text`: The text you want to convert to speech.",
+        "height": 495.17470523089514,
+        "width": 806.0818150700699
+      },
+      "id": "5eb7c547-e364-459d-8c39-cb0a06c7d9cb",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        0,
+        0
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\n  \"error\": \"Invalid inputs.\"\n}",
+        "options": {}
+      },
+      "id": "7bc0ed0a-c93f-432a-9adc-52bff68b9bd8",
+      "name": "Error",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "position": [
+        600,
+        740
+      ],
+      "typeVersion": 1.1
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "If params correct",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate voice": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If params correct": {
+      "main": [
+        [
+          {
+            "node": "Generate voice",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "808a7b60-d6c8-4955-9d3c-65acc213fc83",
+  "meta": {
+    "instanceId": "3f21aaf8491157c44331f10f943768229b6695aa90fd86fc40ddb60f0a283c31"
+  },
+  "id": "iURYLmzfTQ8CJWWV",
+  "tags": [
+    {
+      "createdAt": "2025-06-05T06:58:59.412Z",
+      "updatedAt": "2025-06-05T06:58:59.412Z",
+      "id": "Ba1Vyb7BJb8L5WK7",
+      "name": "ET"
+    },
+    {
+      "createdAt": "2025-06-05T06:58:59.444Z",
+      "updatedAt": "2025-06-05T06:58:59.444Z",
+      "id": "IkoJWBxO2KOLpNNX",
+      "name": "From POC sheet"
+    },
+    {
+      "createdAt": "2025-10-27T08:56:35.862Z",
+      "updatedAt": "2025-10-27T08:56:35.862Z",
+      "id": "4VGoJKQCTJHU7PTY",
+      "name": "viraj-n8n"
+    }
+  ]
+}
