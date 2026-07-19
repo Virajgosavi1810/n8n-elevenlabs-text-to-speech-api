@@ -70,30 +70,6 @@ It can serve as a backend service for AI assistants, accessibility tools, conten
 
 ---
 
-# 📁 Repository Structure
-
-```text
-n8n-elevenlabs-text-to-speech-api/
-│
-├── README.md
-├── workflow.json
-├── LICENSE
-├── .gitignore
-│
-├── sample-data/
-│   ├── sample-request.json
-│   ├── sample-response.json
-│   ├── sample-error.json
-│   └── sample-api.md
-│
-└── images/
-    └── api-demo.png
-```
-
-> **Note:** The `images` folder is optional. Since you're skipping the workflow diagram for now, you can leave it empty or add API screenshots later.
-
----
-
 # 🔧 Prerequisites
 
 Before importing the workflow into n8n, make sure you have:
@@ -194,7 +170,7 @@ If required parameters are missing, the workflow returns a structured JSON error
 
 ## 1️⃣ Import the Workflow
 
-Import `workflow.json` into your n8n instance.
+Import `Generate_Text_to_Speech_Using_Elevenlabs.json` into your n8n instance.
 
 ---
 
