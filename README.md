@@ -24,6 +24,8 @@ This architecture makes it easy to integrate AI voice generation into websites, 
 
 ![Workflow Architecture](images/text-to-speech-using-elevenlabs.png)
 
+---
+
 # ✨ Features
 
 * 🎙️ Convert text into realistic speech
