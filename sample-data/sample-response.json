@@ -1,0 +1,8 @@
+{
+    "success": true,
+    "status": 200,
+    "message": "Speech generated successfully.",
+    "content_type": "audio/mpeg"
+}
+
+#Note: The actual workflow returns binary MP3 audio. This JSON file is provided only as sample API documentation for GitHub readers.
